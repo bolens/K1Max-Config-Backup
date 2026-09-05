@@ -1,9 +1,9 @@
-# Printer Configuration Constitution
+# K1 Max Configuration Constitution
 
 ## Core Principles
 
 ### I. Hardware-Specific Source of Truth
-Tracked Klipper, Moonraker, screen, and macro files MUST describe the documented printer hardware. Machine-specific calibration MUST remain explicit and MUST NOT be generalized to other printers.
+Tracked Klipper, Moonraker, screen, and macro files MUST describe this K1 Max and its CoreXY motion configuration. `printer.cfg`, `printer_params.cfg`, and the modular files under `macros/` define owned configuration; dated snapshots remain recovery references. Machine-specific calibration MUST remain explicit and MUST NOT be generalized to other printers.
 
 ### II. Motion and Thermal Safety
 Changes to limits, homing, probing, heaters, motors, sensors, and macros MUST preserve safe bounds and fail safely. Live printer actions require explicit operator authorization.
@@ -21,4 +21,4 @@ Includes, sections, macros, pins, and referenced files MUST be checked staticall
 
 This repository governs one printer configuration. Safety-impacting exceptions require hardware context, validation evidence, and a constitution version update.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-02 | **Last Amended**: 2026-09-02
+**Version**: 1.0.1 | **Ratified**: 2026-09-02 | **Last Amended**: 2026-09-05
