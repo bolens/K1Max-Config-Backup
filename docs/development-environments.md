@@ -9,7 +9,7 @@ repo-check
 devenv test
 ```
 
-The shell supplies Markdown lint, Python, Ruff, Bash, Git, jq, ShellCheck, and GNU utilities for reviewing this K1 Max CoreXY backup. `repo-check` validates maintained documentation, adapter behavior, and the existing metadata/shell hook. Firmware-specific parsing, include/macro review, and operator-controlled hardware checks remain separate acceptance work for configuration changes. The environment performs no printer operations and does not open retained database archives.
+The shell supplies Markdown lint, Python with NumPy/Matplotlib/SciPy, Ruff, Bash, Git, jq, ShellCheck, and GNU utilities for reviewing this K1 Max CoreXY backup. `repo-check` validates maintained documentation, adapter behavior, offline plot file handling and synthetic numerical plots, Python syntax, and the existing metadata/shell hook. The numerical fixtures use generated CSV data; they do not acquire measurements or connect to the printer. Firmware-specific parsing, include/macro review, and operator-controlled hardware checks remain separate acceptance work for configuration changes. The environment performs no printer operations and does not open retained database archives.
 
 Commit `devenv.lock` with deliberate input updates. Local state and `devenv.local.nix` / `devenv.local.yaml` overrides are ignored. Existing Nix cache settings are used without changing daemon trust.
 
@@ -39,3 +39,8 @@ python3 scripts/development-container.py run apple -- bash scripts/check-develop
 The helper exports an OCI archive and uses `container image load`. Native ARM Macs target `aarch64-linux`; x86 Linux builds target `x86_64-linux`. [Building Linux images from macOS requires a Linux builder](https://devenv.sh/containers/). This workflow does not assume Apple container implements Docker Compose or Docker's daemon API.
 
 Apple execution is not verified by Linux tests. The environment validates source and tooling. Configuration compatibility depends on the K1 Max firmware and hardware. Follow [the backup delivery playbook](../RELEASING.md) for review and recovery.
+
+For completed captures copied from the printer, use
+`python3 GuppyScreen/scripts/graph_belts.py --offline -o belts.png a.csv b.csv`.
+The offline option skips Linux process-descriptor inspection. Finish or stop
+acquisition before copying the inputs. Default live-capture waiting is unchanged.
