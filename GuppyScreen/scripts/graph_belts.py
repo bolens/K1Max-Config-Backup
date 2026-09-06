@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Modified by bolens, 2026-09-06: validate CSV input and preserve plot output.
+# Modified by bolens, 2026-09-06: validate CSV input, preserve plot output,
+# and support completed offline captures without Linux process inspection.
 
 #################################################
 ######## CoreXY BELTS CALIBRATION SCRIPT ########
@@ -486,10 +487,10 @@ def parse_log(logname):
     return np.loadtxt(logname, comments='#', delimiter=',')
 
 
-def belts_calibration(lognames, klipperdir="~/klipper", max_freq=200., graph_spectogram=True, width=8.3, height=11.6):
+def belts_calibration(lognames, klipperdir="~/klipper", max_freq=200., graph_spectogram=True, width=8.3, height=11.6, offline=False):
     for filename in lognames[:2]:
         # Wait for the file handler to be released by Klipper
-        while is_file_open(filename):
+        while not offline and is_file_open(filename):
             time.sleep(2)
 
     # Parse data
@@ -555,6 +556,9 @@ def main():
     opts.add_option("-l", "--height", type="float", dest="height",
                     default=11.6, help="height (inches) of the graph(s)")
     
+    opts.add_option("--offline", action="store_true", default=False,
+                    help="read completed captures without waiting for live file handles")
+
     options, args = opts.parse_args()
     if len(args) < 1:
         opts.error("Incorrect number of arguments")
@@ -562,7 +566,7 @@ def main():
         opts.error("You must specify an output file.png to use the script (option -o)")
 
     fig = belts_calibration(args, options.klipperdir, options.max_freq, options.no_spectogram,
-                            options.width, options.height)
+                            options.width, options.height, options.offline)
     save_figure(fig, options.output, default_format=matplotlib.rcParams["savefig.format"])
 
 

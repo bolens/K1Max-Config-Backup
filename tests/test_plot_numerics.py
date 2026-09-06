@@ -49,8 +49,8 @@ class PlotNumericalTests(unittest.TestCase):
                 )
                 for frequency in (100, 200, 300)
             ] + [
-                ("belts", "graph_belts.py", ["-n", *logs]),
-                ("spectrogram", "graph_belts.py", logs),
+                ("belts", "graph_belts.py", ["--offline", "-n", *logs]),
+                ("spectrogram", "graph_belts.py", ["--offline", *logs]),
             ]
             for name, script, args in cases:
                 with self.subTest(name=name):

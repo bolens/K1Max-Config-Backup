@@ -39,3 +39,8 @@ python3 scripts/development-container.py run apple -- bash scripts/check-develop
 The helper exports an OCI archive and uses `container image load`. Native ARM Macs target `aarch64-linux`; x86 Linux builds target `x86_64-linux`. [Building Linux images from macOS requires a Linux builder](https://devenv.sh/containers/). This workflow does not assume Apple container implements Docker Compose or Docker's daemon API.
 
 Apple execution is not verified by Linux tests. The environment validates source and tooling. Configuration compatibility depends on the K1 Max firmware and hardware. Follow [the backup delivery playbook](../RELEASING.md) for review and recovery.
+
+For completed captures copied from the printer, use
+`python3 GuppyScreen/scripts/graph_belts.py --offline -o belts.png a.csv b.csv`.
+The offline option skips Linux process-descriptor inspection. Finish or stop
+acquisition before copying the inputs. Default live-capture waiting is unchanged.

@@ -70,7 +70,7 @@ files and 14 external helper symlinks, and reported no within-file structural
 parse errors. Repeated sections across includes are not treated as a complete
 firmware validation. Symlinks were enumerated without reading their targets.
 
-Native validation passes 12 tests: five container-adapter tests, six file-boundary
+Native validation passes 14 tests: five container-adapter tests, eight file-boundary
 tests, and one numerical test with five CLI subcases. Synthetic captures render
 shaper plots at 100/200/300 Hz, belt comparison and a differential spectrogram.
 The system Python provides the numerical packages; the locked development shell
@@ -81,3 +81,8 @@ space. Validation passed using cache/bytecode directories under `/tmp`. Hosted
 Nix/container verification and delivery remain pending. Local Nix syntax parsing
 passes. The plot replacement guarantee covers image output; calibration CSV
 writing retains its existing behavior.
+
+FR-008 maps to the explicit belt `--offline` option and two capture-wait
+regressions. Completed synthetic captures use this mode on both platforms.
+The default still waits on Linux process descriptors. The first macOS run
+exposed the Linux-only check; hosted validation of this correction is pending.

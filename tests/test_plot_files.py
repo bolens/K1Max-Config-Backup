@@ -10,7 +10,7 @@ import tempfile
 import types
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "GuppyScreen/scripts"
 
@@ -96,6 +96,34 @@ class PlotFileTests(unittest.TestCase):
                     output_helper()(fig, target)
             self.assertEqual(target.read_bytes(), b"previous")
             self.assertEqual(list(Path(tmp).iterdir()), [target])
+
+    def test_offline_belts_do_not_inspect_process_descriptors(self):
+        opened = Mock(side_effect=AssertionError("must not inspect processes"))
+        self.check_capture_wait(opened, offline=True)
+        opened.assert_not_called()
+
+    def test_live_belts_still_wait_for_open_captures(self):
+        opened = Mock(side_effect=[True, False, False])
+        sleep = self.check_capture_wait(opened, offline=False)
+        self.assertEqual(opened.call_count, 3)
+        sleep.assert_called_once_with(2)
+
+    def check_capture_wait(self, opened, offline):
+        sleep = Mock()
+        parse = Mock(side_effect=ValueError("fixture reached parsing"))
+        calibrate = source_function(
+            "graph_belts.py",
+            "belts_calibration",
+            {
+                "is_file_open": opened,
+                "time": types.SimpleNamespace(sleep=sleep),
+                "parse_log": parse,
+            },
+        )
+        with self.assertRaisesRegex(ValueError, "fixture reached parsing"):
+            calibrate(["a.csv", "b.csv"], **({"offline": True} if offline else {}))
+        parse.assert_called_once_with("a.csv")
+        return sleep
 
     def check_output(self, fail):
         for filename in ("graph_belts.py", "calibrate_shaper.py"):

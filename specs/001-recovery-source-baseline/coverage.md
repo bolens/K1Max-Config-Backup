@@ -15,9 +15,14 @@ Static inspection parsed 7 available files in the active include chain using Pyt
 
 [Detailed contracts](legacy-contracts.md) cover 14 source families and all 46
 available active macros. FR-005/FR-006 map to `tests/test_plot_files.py` and both
-CLI readers/output paths; six file-boundary tests pass. FR-007 maps to
+CLI readers/output paths; eight file-boundary tests pass. FR-007 maps to
 `tests/test_plot_numerics.py`; all five real numerical/PNG subcases pass. The
-complete native gate passes 12 tests, Markdown/Ruff/source syntax and metadata
+complete native gate passes 14 tests, Markdown/Ruff/source syntax and metadata
 checks. Actionlint and offline Zizmor pass. Numerical fixtures do not validate
 printer calibration, firmware commands or external helpers. Hosted delivery is
 not yet complete.
+
+FR-008 maps to the explicit belt `--offline` option and two capture-wait
+regressions. Completed synthetic captures use this mode on both platforms.
+The default still waits on Linux process descriptors. The first macOS run
+exposed the Linux-only check; hosted validation of this correction is pending.
