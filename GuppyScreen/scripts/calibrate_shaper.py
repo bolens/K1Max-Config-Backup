@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Modified by bolens, 2026-09-06: validate CSV input and preserve plot output.
+# Also align shaper predictions with the requested display frequency range.
 ###!/usr/data/rootfs/usr/bin/python3
 # Shaper auto-calibration script
 #

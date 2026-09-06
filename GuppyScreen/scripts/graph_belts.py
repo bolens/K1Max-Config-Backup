@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Modified by bolens, 2026-09-06: validate CSV input and preserve plot output.
 
 #################################################
 ######## CoreXY BELTS CALIBRATION SCRIPT ########
