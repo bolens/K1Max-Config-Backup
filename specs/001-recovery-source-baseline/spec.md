@@ -48,3 +48,13 @@ A future change affects this baseline.
 ## Edge cases and operational limits
 
 Vendor Klipper modules, external includes, physical wiring, calibration, homing, heating, and restore readiness are unverified. Static syntax does not establish printer safety. The producing firmware is not available for a full configuration load; preserve existing configuration values and obtain compatible firmware/hardware evidence before any restore.
+
+## Detailed legacy audit: 2026-09-06
+
+[Detailed contracts](legacy-contracts.md) map the retained configuration, macro,
+plotting and maintenance families. Corrective requirements below apply to offline
+file processing, without changing machine configuration.
+
+- **FR-005**: Both plot log readers MUST accept raw accelerometer CSV with or without leading comments and reject empty input with a clear error.
+- **FR-006**: Both plot commands MUST preserve an existing plot image if rendering its replacement fails and remove temporary output owned by the failed invocation.
+- **FR-007**: Changing the plot frequency limit MUST preserve matching frequency/response array lengths. Displaying raw data above the model's calculation range MUST NOT extrapolate a shaper prediction outside that range.

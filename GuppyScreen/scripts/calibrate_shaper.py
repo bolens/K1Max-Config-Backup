@@ -11,15 +11,16 @@ import importlib, optparse, os, sys, pathlib
 from textwrap import wrap
 import numpy as np, matplotlib
 import shaper_calibrate
+from plot_output import save_figure
 import json
 
 MAX_TITLE_LENGTH=65
 
 def parse_log(logname):
     with open(logname) as f:
-        for header in f:
-            if not header.startswith('#'):
-                break
+        header = next((line for line in f if line.strip() and not line.startswith('#')), '')
+        if not header:
+            raise ValueError("File %s is empty or contains only comments" % logname)
         if not header.startswith('freq,psd_x,psd_y,psd_z,psd_xyz'):
             # Raw accelerometer data
             return np.loadtxt(logname, comments='#', delimiter=',')
@@ -71,6 +72,12 @@ def plot_freq_response(lognames, calibration_data, shapers,
     py = calibration_data.psd_y[freqs <= max_freq]
     pz = calibration_data.psd_z[freqs <= max_freq]
     freqs = freqs[freqs <= max_freq]
+    # Shaper estimates cover only MAX_FREQ; display limits can be lower or higher.
+    fitted = calibration_data.freq_bins <= shaper_calibrate.MAX_FREQ
+    fitted_freqs = calibration_data.freq_bins[fitted]
+    visible = fitted_freqs <= max_freq
+    fitted_freqs = fitted_freqs[visible]
+    fitted_psd = calibration_data.psd_sum[fitted][visible]
 
     fontP = matplotlib.font_manager.FontProperties()
     fontP.set_size('small')
@@ -104,9 +111,9 @@ def plot_freq_response(lognames, calibration_data, shapers,
         linestyle = 'dotted'
         if shaper.name == selected_shaper:
             linestyle = 'dashdot'
-            best_shaper_vals = shaper.vals
-        ax2.plot(freqs, shaper.vals, label=label, linestyle=linestyle)
-    ax.plot(freqs, psd * best_shaper_vals,
+            best_shaper_vals = shaper.vals[visible]
+        ax2.plot(fitted_freqs, shaper.vals[visible], label=label, linestyle=linestyle)
+    ax.plot(fitted_freqs, fitted_psd * best_shaper_vals,
             label='After\nshaper', color='cyan')
     # A hack to add a human-readable shaper recommendation to legend
     ax2.plot([], [], ' ',
@@ -173,9 +180,8 @@ def main():
         if options.output is None:
             matplotlib.pyplot.show()
         else:
-            pathlib.Path(options.output).unlink(missing_ok=True)
             fig.set_size_inches(options.width, options.height)
-            fig.savefig(options.output)
+            save_figure(fig, options.output, default_format=matplotlib.rcParams["savefig.format"])
             resp['png'] = options.output
 
     print(json.dumps(resp))

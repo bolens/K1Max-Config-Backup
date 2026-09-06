@@ -21,6 +21,7 @@ import locale
 import time
 import glob
 import shaper_calibrate
+from plot_output import save_figure
 from datetime import datetime
 
 matplotlib.use('Agg')
@@ -476,16 +477,12 @@ def compute_signal_data(data, max_freq):
 
 def parse_log(logname):
     with open(logname) as f:
-        for header in f:
-            if not header.startswith('#'):
-                break
-            if not header.startswith('freq,psd_x,psd_y,psd_z,psd_xyz'):
-                # Raw accelerometer data
-                return np.loadtxt(logname, comments='#', delimiter=',')
-    # Power spectral density data or shaper calibration data
-    raise ValueError("File %s does not contain raw accelerometer data and therefore "
-               "is not supported by this script. Please use the official Klipper "
-               "graph_accelerometer.py script to process it instead." % (logname,))
+        header = next((line for line in f if line.strip() and not line.startswith('#')), '')
+    if not header:
+        raise ValueError("File %s is empty or contains only comments" % logname)
+    if header.startswith('freq,psd_x,psd_y,psd_z,psd_xyz'):
+        raise ValueError("File %s contains PSD data; raw accelerometer data is required" % logname)
+    return np.loadtxt(logname, comments='#', delimiter=',')
 
 
 def belts_calibration(lognames, klipperdir="~/klipper", max_freq=200., graph_spectogram=True, width=8.3, height=11.6):
@@ -565,8 +562,7 @@ def main():
 
     fig = belts_calibration(args, options.klipperdir, options.max_freq, options.no_spectogram,
                             options.width, options.height)
-    pathlib.Path(options.output).unlink(missing_ok=True) 
-    fig.savefig(options.output)
+    save_figure(fig, options.output, default_format=matplotlib.rcParams["savefig.format"])
 
 
 if __name__ == '__main__':
