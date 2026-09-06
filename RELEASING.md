@@ -1,5 +1,7 @@
 # Backup delivery playbook
 
+[Documentation](docs/README.md)
+
 This repository is a continuously updated K1 Max configuration backup. It has
 no versioned releases; immutable Git commits are recovery points.
 
