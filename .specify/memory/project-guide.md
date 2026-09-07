@@ -1,5 +1,7 @@
 # k1-max-config-backup Spec Kit project guide
 
+[Documentation](../../docs/README.md)
+
 Configuration and recovery history for the K1 Max with CoreXY motion.
 
 Read this guide with `AGENTS.md` and `.specify/memory/constitution.md` before

@@ -1,5 +1,7 @@
 # K1 Max Configuration Constitution
 
+[Documentation](../../docs/README.md)
+
 ## Core Principles
 
 ### I. Hardware-Specific Source of Truth
