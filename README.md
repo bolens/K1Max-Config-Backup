@@ -9,3 +9,13 @@ See [the delivery playbook](RELEASING.md) for review and recovery boundaries.
 ## Development tooling
 
 See [development environments](docs/development-environments.md) for locked repository checks and local container adapters. Hardware verification remains separate.
+
+## License scope and attribution
+
+See [third-party notices](THIRD_PARTY_NOTICES.md) for the project license scope,
+retained upstream notices, and dependency or asset exceptions.
+
+## Devcontainer
+
+See [the devcontainer guide](.devcontainer/README.md) for the repository toolchain,
+setup, checks and platform limits.
